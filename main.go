@@ -40,10 +40,9 @@ func main() {
 
 	wg.Wait()
 	close(lists)
-	for wordFreq := range finalValue {
-		for word, freq := range wordFreq {
-			fmt.Printf("%s appear %d times\n", word, freq)
-		}
-		close(finalValue)
+
+	wordFreq := <-finalValue
+	for word, freq := range wordFreq {
+		fmt.Printf("%s appear %d times\n", word, freq)
 	}
 }
