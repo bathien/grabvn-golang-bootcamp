@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package pb;
+
+service BookingFeedbackService {
+    rpc Create(CreateRequest) returns (CreateResponse);
+    rpc GetByPassengerID(GetFeedbacksByPassengerIdRequest) returns (GetFeedbacksByPassengerIdResponse);
+    rpc GetByBookingCode(GetFeedbackByBookingCodeRequest) returns (GetFeedbackByBookingCodeResponse);
+    rpc Delete(DeleteRequest) returns (DeleteResponse);
+    rpc GetAll(GetAllRequest) returns (GetAllResponse);
+
+}
+
+// Booking feedback of customer
+message BookingFeedback {
+    // Unique integer identifier of the feedback
+    int64 id = 1;
+
+    // content of the feedback
+    string feedback = 2;
+
+    // booking code reference to the feedback
+    string bookingCodeId = 3;
+    string passengerId = 4;
+}
+
+// Request data to create new feedback
+message CreateRequest{
+    // API versioning
+    string api = 1;
+
+    // Feedback entity to add
+    BookingFeedback bookingFeedback = 2;
+}
+
+// Contains data of created feedback
+message CreateResponse{
+    // API versioning
+    string api = 1;
+
+    // ID of created feedback
+    int64 id = 2;
+}
+
+
+// Contains feedbacks of passenger ID
+message GetFeedbacksByPassengerIdResponse{
+    // API versioning
+    string api = 1;
+
+    // Feedbacks by passenger ID
+    repeated BookingFeedback bookingFeedback = 2;
+}
+
+// Request data to read feedbacks by passenger ID 
+message GetFeedbacksByPassengerIdRequest{
+    // API versioning
+    string api = 1;
+
+    // passenger ID
+    string passengerID = 2;
+}
+
+// Contains feedback data specified in by booking code request
+message GetFeedbackByBookingCodeRequest{
+    // API versioning
+    string api = 1;
+
+    // booking code
+    string bookingCodeId = 2;
+}
+
+// Request data to read feedback by booking code
+message GetFeedbackByBookingCodeResponse{
+    // API versioning
+    string api = 1;
+
+    // Feedback entity read by booking code
+    BookingFeedback bookingFeedback = 2;
+}
+
+// Request data to delete feedback
+message DeleteRequest{
+    // API versioning
+    string api = 1;
+
+    // Unique integer identifier of the feedback to delete
+    int64 id = 2;
+}
+
+// Contains status of delete operation
+message DeleteResponse{
+    // API versioning
+    string api = 1;
+
+    // Contains number of entities have beed deleted
+    // Equals 1 in case of succesfull delete
+    int64 deleted = 2;
+}
+
+// Request data to read all feedback
+message GetAllRequest{
+    // API versioning
+    string api = 1;
+}
+
+// Contains list of all feedbacks
+message GetAllResponse{
+    // API versioning
+    string api = 1;
+
+    // List of all feedbacks
+    repeated BookingFeedback bookingFeedbacks = 2;
+}
