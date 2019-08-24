@@ -49,7 +49,7 @@ func (s *Server) echo(writer http.ResponseWriter, request *http.Request) {
 
 	// 30% chance of failure
 	if rand.Intn(100) < 30 {
-		err := s.datadog.Count("server_broken", 1, nil, 1)
+		err := s.datadog.Count("server_broken", 1, []string{"error"}, 1)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -58,7 +58,10 @@ func (s *Server) echo(writer http.ResponseWriter, request *http.Request) {
 		writer.Write([]byte("a chaos monkey broke your server"))
 		return
 	}
-
+	err := s.datadog.Count("server_happy", 1, []string{"info"}, 1)
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Happy pat
 	writer.WriteHeader(200)
 	request.Write(writer)
